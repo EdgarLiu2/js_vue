@@ -118,7 +118,7 @@
             </li>
         </ul>
         <ul>
-            <li v-for="(value, name, index) in object" :key="key">
+            <li v-for="(value, name, index) in object" :key="index">
                 {{ index }}. {{ name }} : {{ value }}
             </li>
         </ul>
@@ -149,6 +149,10 @@
         <div>
             <button v-on:click="counter += 1">counter: {{counter}}</button>
             <button v-on:click="func_great('abc', $event)">Great</button>
+            <button v-on:click="great">Greet button</button>
+
+            <!-- 只有在 `key` 是 `Enter` 时调用 `vm.submit()` -->
+            <input v-on:keyup.enter="submit">
         </div>
         <div>
             事件修饰符
@@ -447,11 +451,11 @@
 
         // 变异方法 (mutation method)
         // push() pop() shift() unshift() splice() sort() reverse()
-        app8.items.push({ message: 'Baz' })
+        // app8.items.push({ message: 'Baz' })
         // 替换数组
-        app8.items = app8.items.filter(function (item) {
-            return !item.message.match(/Foo/)
-        })
+        // app8.items = app8.items.filter(function (item) {
+        //     return !item.message.match(/Foo/)
+        // })
 
         
         Vue.component('todo-item', {
@@ -464,7 +468,7 @@
             props: ['title']
             })
 
-        new Vue({
+        var app8_1 = new Vue({
             el: '#todo-list-example',
             data: {
                 newTodoText: '',
@@ -511,6 +515,21 @@
                     alert(this.name);
                     alert(str);
                     console.log(event)
+                },
+                great: function(event) {
+                    // event 是原生 DOM 事件
+                    if (event) {
+                        alert(event.target.tagName);
+                    }
+                },
+                doThis: function(event) {
+                    alert('doThis');
+                },
+                doThat: function(event) {
+                    alert('doThat');
+                },
+                submit: function(event) {
+                    alert('submit');
                 }
             }
         })
