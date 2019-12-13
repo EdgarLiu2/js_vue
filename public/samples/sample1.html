@@ -1,0 +1,243 @@
+<html>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<head>
+    <title>Vue Sample 1</title>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 因为 AJAX 库和通用工具的生态已经相当丰富，Vue 核心代码没有重复 -->
+    <!-- 提供这些功能以保持精简。这也可以让你自由选择自己更熟悉的工具。 -->
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+    
+    <style type="text/css">
+        .red {
+            color: red;
+        }
+        .blue {
+            color: blue;
+            font-size: 100px;
+        }
+        .active {
+            background: #FF0000
+        }
+        .test {
+            font-size: 30px
+        }
+        .green {
+            color: #00FF00 
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h3>Hello {{name}} {{message}}</h3>
+    </div>
+
+    <div id="app2">
+        <h3>Hello {{name}} {{message}}</h3>
+        <p>
+            Ask a yes/no question:
+            <input v-model="question">
+        </p>
+        <p>
+            {{ answer }}
+            <img v-bind:src="image_url" />
+        </p>
+
+    </div>
+
+    <div id="app3">
+        <h3>{{msg}}</h3>
+    </div>
+
+    <div id="app4">
+        <p>Using mustaches: {{ rawHtml }} </p>
+        <p>Using v-html directive: <span v-html="rawHtml"></span></p>
+        <p v-html="rawHtml"></p>
+        <div v-bind:id="dynamicId"></div>
+        <div v-bind:class="color">test...</div>
+        <p> {{ number + 1}} </p>
+        <p> {{ ok ? 'YES' : 'NO' }} </p>
+        <p> {{ message.split('').reverse().join('') }} </p>
+        <p>Original message: "{{ message }}"</p>
+        <p>Computed reversed message: "{{ reversedMessage }}"</p>
+    </div>
+
+    <div id="app5">
+        <p v-if="seen">You can see me</p>
+        <!-- 在这里 href 是参数，告知 v-bind 指令将该元素的 href 特性与表达式 url 的值绑定。-->
+        <a v-bind:href="url">v-bind:href ...</a>
+        <!-- attributeName，其值为 "href"，那么这个绑定将等价于 v-bind:href 
+        <a v-bind:[attributeName]="url"> 参数表达式 ... </a>
+        -->
+        <div @click="click1">
+            <div @click.stop="click2">
+                click me
+            </div>
+        </div>
+    </div>
+
+    <div id="app6">
+        <div
+            v-bind:class="{ active: isActive, green: isGreen }"
+            class="test"
+            style="width:200px; height:200px; text-align:center; line-height:200px;">
+            hi Vue
+        </div>
+
+        <div v-bind:style="{color: color, fontSize: size}">
+            hi Vue
+        </div>
+    </div>
+
+    <div id="app7">
+        <div v-if="type === 'A'">A</div>
+        <div v-else-if="type === 'B'">B</div>
+        <div v-else-if="type === 'C'">C</div>
+        <div v-else>Other</div>
+        <!-- 带有 v-show 的元素始终会被渲染并保留在 DOM 中。v-show 只是简单地切换元素的 CSS 属性 display。 -->
+        <h1 v-show="ok">Hello</h1>
+
+        <template v-if="loginType === 'username'">
+            <label>Username</label>
+            <input placeholder="Enter your username" key="username-input">
+        </template>
+        <template v-else>
+            <label>Email</label>
+            <input placeholder="Enter your email address">
+        </template>
+        <button v-on:click="switchLoginType" key="email-input">Toggle login type</button>
+    </div>
+
+    <div id="app8">
+        <ul>
+            <li v-for="(item, index) in items" :key="index">
+                {{ index }} {{ item.message }}
+            </li>
+        </ul>
+        <ul>
+            <li v-for="(value, name, index) in object" :key="index">
+                {{ index }}. {{ name }} : {{ value }}
+            </li>
+        </ul>
+    </div>
+
+    <div id="todo-list-example">
+        <form v-on:submit.prevent="addNewTodo">
+            <label for="new-todo">Add a todo</label>
+            <input
+                v-model="newTodoText"
+                id="new-todo"
+                placeholder="E.g. Feed the cat"
+            >
+            <button>Add</button>
+        </form>
+        <ul>
+            <li
+                is="todo-item"
+                v-for="(todo, index) in todos"
+                v-bind:key="todo.id"
+                v-bind:title="todo.title"
+                v-on:remove="todos.splice(index, 1)"
+            ></li>
+        </ul>
+    </div>
+
+    <div id="app9">
+        <div>
+            <button v-on:click="counter += 1">counter: {{counter}}</button>
+            <button v-on:click="func_great('abc', $event)">Great</button>
+            <button v-on:click="great">Greet button</button>
+
+            <!-- 只有在 `key` 是 `Enter` 时调用 `vm.submit()` -->
+            <input v-on:keyup.enter="submit">
+        </div>
+        <div>
+            事件修饰符
+            <!-- 阻止单击事件继续传播 -->
+            <a v-on:click.stop="doThis"></a>
+
+            <!-- 提交事件不再重载页面 -->
+            <form v-on:submit.prevent="onSubmit"></form>
+
+            <!-- 修饰符可以串联 -->
+            <a v-on:click.stop.prevent="doThat"></a>
+
+            <!-- 只有修饰符 -->
+            <form v-on:submit.prevent></form>
+
+            <!-- 添加事件监听器时使用事件捕获模式 -->
+            <!-- 即内部元素触发的事件先在此处理，然后才交由内部元素进行处理 -->
+            <div v-on:click.capture="doThis">...</div>
+
+            <!-- 只当在 event.target 是当前元素自身时触发处理函数 -->
+            <!-- 即事件不是从内部元素触发的 -->
+            <div v-on:click.self="doThat">...</div>
+        </div>
+    </div>
+
+    <div id="app10">
+        <input v-model="message" placeholder="edit me">
+        <p>Message is: {{message}}</p>
+        <textarea v-model="message2" placeholder="add multiple lines"></textarea>
+        <p style="white-space: pre-line">{{message2}}</p>
+
+        <div>
+            <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+            <label for="jack">Jack</label>
+            <input type="checkbox" id="john" value="John" v-model="checkedNames">
+            <label for="john">John</label>
+            <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+            <label for="mike">Mike</label>
+            <br>
+            <span>Checked names: {{ checkedNames }}</span>
+        </div>
+
+        <div>
+            <input type="radio" id="one" value="One" v-model="picked">
+            <label for="one">One</label>
+            <br>
+            <input type="radio" id="two" value="Two" v-model="picked">
+            <label for="two">Two</label>
+            <br>
+            <span>Picked: {{ picked }}</span>
+        </div>
+        
+        <div>
+        	<select v-model="selected">
+        		<option v-for="option in select_options" v-bind:value="option.value">
+        			{{ option.text}}
+        		</option>
+        	</select>
+        	<span> Selected: {{ selected }}</span>
+        	
+        	<!-- 在“change”时而非“input”时更新 -->
+			<input v-model.lazy="msg" >
+			<!-- 如果想自动将用户的输入值转为数值类型，可以给 v-model 添加 number 修饰符 -->
+			<input v-model.number="age" type="number">
+			<!-- 如果要自动过滤用户输入的首尾空白字符，可以给 v-model 添加 trim 修饰符 -->
+			<input v-model.trim="msg">
+        </div>
+
+        <button type="button" @click="submit">Submit</button>
+    </div>
+
+    <div id="app11">
+        <button-counter title="title1: " @clicknow="clicknow">
+            <h2>hi ... h2</h2>
+        </button-counter>
+        <button-counter title="title2: "></button-counter>
+    </div>
+
+    <div id="app12">
+        <button-counter2 title="title2: "></button-counter2>
+        <test></test>
+    </div>
+
+</body>
+
+<script src="sample1.js"></script>
+</html>
