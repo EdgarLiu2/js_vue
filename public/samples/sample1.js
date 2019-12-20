@@ -386,6 +386,35 @@ var app11 = new Vue({
     }
 })
 
+Vue.component('blog-post', {
+	props: ['post'],
+	template: ' \
+	<div class="blog-post"> \
+		<h3> {{ post.title }} </h3> \
+		<input v-bind:value="post.content" v-on:input="$emit(\'input\', $event.target.value)"> \
+		<button v-on:click="$emit(\'enlarge-text\')">Enlarge text</button> \
+		<button v-on:click="$emit(\'enlarge-text2\', 0.1)">Enlarge text 2</button> \
+		<div v-html="post.content"></div> \
+		<slot></slot> \
+	</div>'
+})
+var appBlog = new Vue({
+	el: '#blog-post-demo',
+	data: {
+		posts: [
+			{ id: 1, title: 'My journey with Vue', content: 'content1' },
+			{ id: 2, title: 'Blogging with Vue', content: 'content2' },
+			{ id: 3, title: 'Why Vue is so fun', content: 'content3' }
+		],
+		postFontSize: 1
+	},
+	methods: {
+		onEnlargeText: function(enlargeAmount) {
+			this.postFontSize += enlargeAmount;
+		}
+	}
+})
+
 /*
  * 组件注册
  */

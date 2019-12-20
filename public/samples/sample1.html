@@ -231,6 +231,17 @@
         </button-counter>
         <button-counter title="title2: "></button-counter>
     </div>
+    
+    <div id="blog-post-demo">
+    	<div :style="{ fontSize: postFontSize + 'em' }">
+	        <blog-post v-for="post in posts" v-bind:key="post.id" v-bind:post="post"
+	        			v-on:enlarge-text="postFontSize += 0.1"
+	        			v-on:enlarge-text2="onEnlargeText"
+	        			v-model="post.content">
+	        	
+	        </blog-post>
+        </div>
+    </div>
 
     <div id="app12">
         <button-counter2 title="title2: "></button-counter2>
