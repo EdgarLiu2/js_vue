@@ -352,6 +352,15 @@ Vue.component('button-counter', {
     props: [
         'title'
     ],
+//     props: {
+//         // 每个 prop 都有指定的值类型
+//         title: String,
+//         likes: Number,
+//         isPublished: Boolean,
+//         commentIds: Array,
+//         author: Object,
+//         callback: Function
+//     },
     data: function() {
         return {
             counter: 0
@@ -448,5 +457,52 @@ var app12 = new Vue({
         test: {
             template: "<h2>h2 ....</h2>"
         }
+    }
+})
+
+/*
+ * Prop
+ */
+ Vue.component('blog-post2', {
+	props: {
+        // 每个 prop 都有指定的值类型
+        title: String,
+        content: String,
+        likes: Number,
+        isPublished: Boolean,
+        commentIds: Array,
+        author: Object,
+        callback: Function
+	},
+	template: ' \
+	<div class="blog-post2"> \
+		<h3> {{ title }} {{ author }} </h3> \
+		<h4> likes={{ likes }} isPublished={{ isPublished }}</h4> \
+		<input v-bind:value="content"> \
+		<div v-html="content"></div> \
+		<h4> commentIds={{ commentIds }} </h4> \
+		<slot></slot> \
+	</div>'
+})
+
+var app13 = new Vue({
+    // element, id选择器
+    el: '#app13',
+    // 数据
+    data: {
+		post: {
+			title: 'MyTitle1',
+			content: 'MyContent1',
+			author: {					// 传入一个对象
+				name: 'Veronica',
+				company: 'Veridian Dynamics'
+			},
+			likes: 42,					// 传入一个数字
+			isPublished: true,			// 传入一个布尔值
+			commentIds: [234, 266, 273]	// 传入一个数组
+		}
+    },
+    methods: {
+
     }
 })
